@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Book Collection</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body class="bg-gray-50">
+        <div class="container mx-auto px-4 py-8 md:px-12 lg:px-24">
+            <!-- Book Details Section -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Book Image -->
+                <div class="flex justify-center items-center">
+                    <img
+                        src="/books/<%= book.coverimage %>"
+                        alt="<%= book.title %>"
+                        class="max-w-full h-96 shadow-xl rounded-lg transform transition hover:scale-105 hover:shadow-lg hover:shadow-[#242847] object-cover"
+                    />
+                </div>
+
+                <!-- Book Information -->
+                <div class="space-y-4">
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        <%= book.title %>
+                    </h1>
+                    <div class="flex items-center space-x-4">
+                        <p class="text-xl text-gray-700">
+                            by <%= book.author %>
+                        </p>
+                        <span
+                            class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded"
+                        >
+                            <%= book.genre %>
+                        </span>
+                    </div>
+
+                    <!-- Rating and Reviews -->
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <% const rating = (Math.random() * 5).toFixed(1);
+                            const reviewCount = Math.floor(Math.random() * 100);
+                            %>
+
+                            <!-- Full Stars -->
+                            <% for (let i = 0; i < Math.floor(rating); i++) { %>
+                            <svg
+                                class="w-5 h-5 text-yellow-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"
+                                />
+                            </svg>
+                            <% } %>
+
+                            <!-- Display Rating Value -->
+                            <span class="ml-2 text-gray-600">
+                                (<%= rating %>/5)
+                            </span>
+                        </div>
+
+                        <!-- Review Count -->
+                        <span class="text-gray-500">
+                            <%= reviewCount %> Reviews
+                        </span>
+                    </div>
+
+                    <!-- Price and Availability -->
+                    <div class="flex items-center space-x-4 py-4">
+                        <% if (book.isavailable === true) { %>
+                        <span
+                            class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded"
+                        >
+                            Available
+                        </span>
+                        <% } else { %>
+                        <span
+                            class="bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded"
+                        >
+                            Not Available
+                        </span>
+                        <% } %>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <button
+                        class="<%= book.isavailable ? 'bg-[#29C782] text-white px-6 py-2 rounded-md hover:bg-green-600 cursor-pointer' : 'bg-gray-400 text-white px-6 py-2 rounded-md cursor-not-allowed' %>"
+                        disabled="<%= !book.isavailable %>"
+                        id="borrow-book-btn"
+                        data-book-id="<%= book.id %>"
+                    >
+                        Borrow Book
+                    </button>
+                </div>
+            </div>
+
+            <!-- Book Description -->
+            <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-900">
+                    Book Description
+                </h2>
+                <p class="text-gray-700 leading-relaxed">
+                    <%= book.description %>
+                </p>
+            </div>
+
+            <!-- Additional Book Details -->
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">Book Details</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <strong>Publication Date:</strong> <%=
+                            book.publicationdate %>
+                        </li>
+                        <li><strong>Pages:</strong> <%= book.pages %></li>
+                    </ul>
+                </div>
+                <!--  -->
+            </div>
+
+            <!-- More Books Section -->
+            <div>
+                <h2 class="text-2xl font-semibold mb-6 text-gray-900">
+                    Similar Books
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <% otherBooksExcludingCurrent.forEach(function(similarBook)
+                    { %>
+                    <div
+                        class="book-card bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105"
+                    >
+                        <div>
+                            <img
+                                src="/books/<%= similarBook.coverimage %>"
+                                alt="<%= similarBook.title %>"
+                                class="w-full h-56 object-cover"
+                            />
+                        </div>
+                        <div
+                            class="p-4 relative h-32"
+                            title="<%= similarBook.title %>"
+                        >
+                            <h2
+                                class="text-base font-semibold mb-1 text-gray-900"
+                            >
+                                <%= similarBook.title &&
+                                similarBook.title.length > 23 ?
+                                similarBook.title.slice(0, 23) + "..." :
+                                similarBook.title %>
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-1">
+                                by <%= similarBook.author %>
+                            </p>
+                            <a href="/books/<%= similarBook.id %>">
+                                <button
+                                    class="view-details-btn px-2 py-1 text-sm bg-[#29C782] text-white font-bold rounded-md hover:bg-[#242847] hover:text-[#29C782] transition absolute bottom-2 right-2"
+                                    data-book-id="<%= book.id %>"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Add event listener to the button
+            document.addEventListener("DOMContentLoaded", () => {
+                const borrowButton = document.getElementById("borrow-book-btn");
+
+                if (borrowButton) {
+                    borrowButton.addEventListener("click", async () => {
+                        // Get the book ID from the data attribute
+                        const bookId =
+                            borrowButton.getAttribute("data-book-id");
+
+                        try {
+                            // Make the POST request to the endpoint
+                            const response = await fetch(
+                                `/books/${bookId}/borrow`,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                }
+                            );
+
+                            if (response.ok) {
+                                // Success message or redirection
+                                alert("Book borrowed successfully!");
+                                location.reload();
+                            } else {
+                                // Handle errors
+                                const error = await response.json();
+                                alert(
+                                    `Failed to borrow book: ${error.message}`
+                                );
+                            }
+                        } catch (error) {
+                            console.error("Error borrowing the book:", error);
+                            alert("An unexpected error occurred.");
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

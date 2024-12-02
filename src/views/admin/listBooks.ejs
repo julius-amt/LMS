@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Library Book Inventory</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 min-h-screen p-8">
+        <div
+            class="container mx-auto bg-white shadow-md rounded-lg overflow-hidden"
+        >
+            <h1 class="text-3xl font-bold text-center py-6 bg-gray-200">
+                Manage Book Inventory
+            </h1>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+            <div
+                class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                role="alert"
+            >
+                <%= error %>
+            </div>
+            <% } %>
+
+            <table class="w-full">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-4 text-left">Name</th>
+                        <th class="p-4 text-left">Description</th>
+                        <th class="p-4 text-left">Author</th>
+                        <th class="p-4 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% books && books.forEach((book, index) => { %>
+                    <tr
+                        class="border-b hover:bg-gray-50"
+                        data-book-id="<%= book._id %>"
+                    >
+                        <td class="p-4 editable" data-field="title">
+                            <span class="view-mode"><%= book.title %></span>
+                            <input
+                                type="text"
+                                class="edit-mode hidden w-full"
+                                value="<%= book.title %>"
+                            />
+                        </td>
+                        <td class="p-4 editable" data-field="description">
+                            <span class="view-mode"
+                                ><%= book.description %></span
+                            >
+                            <textarea class="edit-mode hidden w-full" rows="3">
+<%= book.description %></textarea
+                            >
+                        </td>
+                        <td class="p-4 editable" data-field="author">
+                            <span class="view-mode"><%= book.author %></span>
+                            <input
+                                type="text"
+                                class="edit-mode hidden w-full"
+                                value="<%= book.author %>"
+                            />
+                        </td>
+
+                        <td class="p-4">
+                            <div class="action-buttons">
+                                <button
+                                    class="edit-btn text-blue-600 hover:text-blue-800 mr-2"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    class="save-btn text-green-600 hover:text-green-800 hidden"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    class="cancel-btn text-red-600 hover:text-red-800 hidden"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+
+            <div class="p-4 text-center">
+                <a
+                    href="/admin/books/create"
+                    class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
+                >
+                    Add New Book
+                </a>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const rows = document.querySelectorAll("tr[data-book-id]");
+
+                rows.forEach((row) => {
+                    const editBtn = row.querySelector(".edit-btn");
+                    const saveBtn = row.querySelector(".save-btn");
+                    const cancelBtn = row.querySelector(".cancel-btn");
+                    const editableFields = row.querySelectorAll(".editable");
+
+                    // Edit button click
+                    editBtn.addEventListener("click", () => {
+                        row.querySelectorAll(".view-mode").forEach((el) =>
+                            el.classList.add("hidden")
+                        );
+                        row.querySelectorAll(".edit-mode").forEach((el) =>
+                            el.classList.remove("hidden")
+                        );
+
+                        editBtn.classList.add("hidden");
+                        saveBtn.classList.remove("hidden");
+                        cancelBtn.classList.remove("hidden");
+                    });
+
+                    // Save button click
+                    saveBtn.addEventListener("click", async () => {
+                        const bookId = row.dataset.bookId;
+                        const updatedData = {};
+
+                        editableFields.forEach((field) => {
+                            const key = field.dataset.field;
+                            const viewMode = field.querySelector(".view-mode");
+                            const editMode = field.querySelector(".edit-mode");
+
+                            updatedData[key] = editMode.value;
+                            viewMode.textContent = editMode.value;
+                        });
+
+                        try {
+                            const response = await fetch(
+                                `/admin/books/edit/${bookId}`,
+                                {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(updatedData),
+                                }
+                            );
+
+                            if (!response.ok) {
+                                throw new Error("Failed to update book");
+                            }
+
+                            // Reset UI
+                            row.querySelectorAll(".view-mode").forEach((el) =>
+                                el.classList.remove("hidden")
+                            );
+                            row.querySelectorAll(".edit-mode").forEach((el) =>
+                                el.classList.add("hidden")
+                            );
+
+                            editBtn.classList.remove("hidden");
+                            saveBtn.classList.add("hidden");
+                            cancelBtn.classList.add("hidden");
+                        } catch (error) {
+                            console.error("Error:", error);
+                            alert("Failed to update book details");
+                        }
+                    });
+
+                    // Cancel button click
+                    cancelBtn.addEventListener("click", () => {
+                        // Revert values
+                        editableFields.forEach((field) => {
+                            const viewMode = field.querySelector(".view-mode");
+                            const editMode = field.querySelector(".edit-mode");
+                            editMode.value = viewMode.textContent;
+                        });
+
+                        row.querySelectorAll(".view-mode").forEach((el) =>
+                            el.classList.remove("hidden")
+                        );
+                        row.querySelectorAll(".edit-mode").forEach((el) =>
+                            el.classList.add("hidden")
+                        );
+
+                        editBtn.classList.remove("hidden");
+                        saveBtn.classList.add("hidden");
+                        cancelBtn.classList.add("hidden");
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
