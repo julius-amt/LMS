@@ -199,6 +199,11 @@ class AdminBooksManagementController {
             success: true,
         });
     }
+
+    static async getTransactions(req: Request, res: Response) {
+        const transactions = await Transaction.findAll();
+        res.render("admin/transactions", { transactions });
+    }
 }
 
 export { BooksController, AdminBooksManagementController };

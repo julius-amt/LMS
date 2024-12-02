@@ -24,4 +24,6 @@ router.delete("/:bookId", AdminBooksManagementController.deleteBook);
 
 router.get("/list", AdminBooksManagementController.listBooks);
 
+router.get("/transactions/", AdminBooksManagementController.getTransactions);
+
 export { router as AdminBooksManagementRouter };

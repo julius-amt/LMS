@@ -28,6 +28,18 @@ The **Library Management System (LMS)** is a simple, yet scalable web applicatio
 
 ---
 
+### **Frontend UI Overview**
+
+The LMS frontend is designed to be intuitive and user-friendly, ensuring a smooth user experience for both librarians and patrons. The frontend is built using EJS templates for rendering dynamic content. Below are the key UI components and their functionalities:
+
+## Login Page
+
+<img src="./src/public/loginUi.png">
+
+## Admin Landing UI
+
+<img src="./src/public/landingPage.png">
+
 ## **Implementation Details**
 
 ### **MVC Architecture:**

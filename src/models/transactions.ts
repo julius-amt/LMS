@@ -57,7 +57,18 @@ class Transaction {
 
     static async findAll() {
         try {
-            const results = await client.query(`SELECT * FROM transactions`);
+            const results = await client.query(`
+                SELECT 
+                    transactions.id AS transactionId,
+                    transactions.returndate,
+                    transactions.createdAt AS transactionCreatedAt,
+                    transactions.status,
+                    books.title,
+                    books.author,
+                    books.createdAt AS bookCreatedAt
+                FROM transactions
+                INNER JOIN books ON transactions.bookId = books.id
+                `);
             return results.rows;
         } catch (error) {
             console.error(error);
