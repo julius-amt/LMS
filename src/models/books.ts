@@ -1,4 +1,5 @@
 import { client } from "../utils/dbConfig";
+import { UpdateBookDataType } from "../utils/types/book-update";
 
 class Book {
     private title: string;
@@ -93,16 +94,15 @@ class Book {
         }
     }
 
-    static async findOneAndUpdate(
-        id: number,
-        title?: string,
-        description?: string,
-        author?: string,
-        coverImage?: string,
-        isAvailable?: boolean,
-        publicationDate?: Date,
-        pages?: number
-    ) {
+    static async findOneAndUpdate({
+        id,
+        title,
+        description,
+        author,
+        isAvailable,
+        publicationDate,
+        pages,
+    }: UpdateBookDataType) {
         const setClause = [];
         const values = [];
 
@@ -118,10 +118,7 @@ class Book {
             setClause.push(`author = $${setClause.length + 1}`);
             values.push(author);
         }
-        if (coverImage) {
-            setClause.push(`coverImage = $${setClause.length + 1}`);
-            values.push(coverImage);
-        }
+
         if (isAvailable !== undefined) {
             setClause.push(`isAvailable = $${setClause.length + 1}`);
             values.push(isAvailable);

@@ -3,6 +3,8 @@ import Transaction from "../models/transactions";
 import Book from "../models/books";
 import { Response, Request } from "express";
 import { validationResult, matchedData } from "express-validator";
+import fs from "fs";
+import path from "path";
 
 class BooksController {
     static async browseBooks(req: Request, res: Response) {
@@ -39,14 +41,10 @@ class BooksController {
         }
 
         // mark the book as borrowed
-        const response = await Book.findOneAndUpdate(
-            parseInt(id),
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            false
-        );
+        const response = await Book.findOneAndUpdate({
+            id: parseInt(id),
+            isAvailable: false,
+        });
 
         if (!response) {
             res.status(500).json({ message: "An error occurred" });
@@ -100,7 +98,6 @@ class AdminBooksManagementController {
         }
 
         try {
-            console.log("Adding book");
             const { title, description, author, publicationdate, pages } =
                 matchedData(req);
             const image = req.file;
@@ -139,10 +136,24 @@ class AdminBooksManagementController {
     static async deleteBook(req: Request, res: Response) {
         const { bookId } = req.params;
 
+        // find book byy id, to delete cover image after deleting the book
+        const book = await Book.findById(parseInt(bookId));
+
         const response = await Book.findOneAndDelete(parseInt(bookId));
         if (!response) {
             res.status(500).json({ message: "An error occurred" });
             return;
+        }
+
+        // delete cover image
+        if (book!.coverimage) {
+            const pathToCoverImage = path.join(
+                __dirname,
+                "..",
+                "public/books",
+                book.coverimage
+            );
+            fs.unlinkSync(path.resolve(pathToCoverImage));
         }
 
         res.status(200).json({
@@ -151,6 +162,7 @@ class AdminBooksManagementController {
         });
     }
 
+    // edit book endpoint handler
     static async editBook(req: Request, res: Response) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -166,13 +178,26 @@ class AdminBooksManagementController {
         }
 
         const { bookId } = req.params;
-        const { title, description, author } = matchedData(req);
-        const book = await Book.findOneAndUpdate(
-            parseInt(bookId),
+        const { title, description, author, publicationdate, pages } =
+            matchedData(req);
+        const response = await Book.findOneAndUpdate({
+            id: parseInt(bookId),
             title,
             description,
-            author
-        );
+            author,
+            publicationDate: publicationdate,
+            pages,
+        });
+
+        if (!response) {
+            res.status(500).json({ message: "An error occurred" });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Book updated successfully",
+            success: true,
+        });
     }
 }
 

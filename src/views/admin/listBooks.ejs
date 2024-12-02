@@ -74,11 +74,11 @@
                                 </svg>
                             </a>
                             <div
-                                class="action-list hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 shadow-lg rounded-md"
+                                class="action-list hidden -top-12 right-24 absolute mt-2 w-32 bg-white border border-gray-200 shadow-lg rounded-md z-20"
                             >
                                 <a
                                     class="edit-btn text-blue-500 text-sm hover:text-[#242847] w-full px-4 py-2 text-left flex items-center gap-2 cursor-pointer"
-                                    onclick="openEditModal('<%= book.id %>', '<%= book.title %>', '<%= book.description %>', '<%= book.author %>', '<%= book.createdAt %>', '<%= book.publicationDate %>', '<%= book.pages %>')"
+                                    onclick="openEditModal('<%= book.id %>', '<%= book.title %>', '<%= book.description %>', '<%= book.author %>', '<%= book.publicationdate %>', '<%= book.pages %>')"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -128,103 +128,95 @@
     <!-- Modal for Editing Book -->
     <div
         id="editModal"
-        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-100"
     >
-        <div class="bg-white rounded-lg w-[600px] p-5">
+        <div class="bg-white rounded-lg w-[500px] p-5">
             <h2 class="text-3xl font-semibold text-center mb-6 text-[#242847]">
                 Edit Book
             </h2>
-            <form id="editBookForm" action="/admin/books/:bookId" method="PUT">
+            <form id="editBookForm">
                 <input type="hidden" id="editBookId" />
                 <div class="mb-6">
                     <label
                         for="editTitle"
-                        class="block text-[#242847] mb-2 text-lg"
+                        class="block text-[#242847] mb-2 text-base"
                     >
                         Title
                     </label>
                     <input
                         type="text"
                         id="editTitle"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        required
+                        class="w-full p-2 border border-[#242847] rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                     />
                 </div>
                 <div class="mb-6">
                     <label
                         for="editDescription"
-                        class="block text-[#242847] mb-2 text-lg"
+                        class="block text-[#242847] mb-2 text-base"
                     >
                         Description
                     </label>
                     <textarea
                         id="editDescription"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        required
+                        class="w-full p-2 border border-[#242847] rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                         rows="4"
                     ></textarea>
                 </div>
                 <div class="mb-6">
                     <label
                         for="editAuthor"
-                        class="block text-[#242847] mb-2 text-lg"
+                        class="block text-[#242847] mb-2 text-base"
                     >
                         Author
                     </label>
                     <input
                         type="text"
                         id="editAuthor"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
-                    />
-                </div>
-                <div class="mb-6">
-                    <label
-                        for="editCreatedAt"
-                        class="block text-[#242847] mb-2 text-lg"
-                    >
-                        Created At
-                    </label>
-                    <input
-                        type="text"
-                        id="editCreatedAt"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        required
+                        class="w-full p-2 border border-[#242847] rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                     />
                 </div>
                 <div class="mb-6">
                     <label
                         for="editPublicationDate"
-                        class="block text-[#242847] mb-2 text-lg"
+                        class="block text-[#242847] mb-2 text-base"
                     >
                         Publication Date
                     </label>
                     <input
-                        type="text"
+                        type="date"
                         id="editPublicationDate"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        required
+                        class="w-full p-2 border border-[#242847] rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                     />
                 </div>
                 <div class="mb-6">
                     <label
                         for="editPages"
-                        class="block text-[#242847] mb-2 text-lg"
+                        class="block text-[#242847] mb-2 text-base"
                     >
                         Pages
                     </label>
                     <input
                         type="number"
                         id="editPages"
-                        class="w-full p-2 border border-[#242847] rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        required
+                        class="w-full p-2 border border-[#242847] rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                     />
                 </div>
                 <div class="flex justify-end space-x-6">
                     <a
                         type="button"
                         onclick="closeEditModal()"
-                        class="bg-[#242847] text-white p-2 cursor-pointer rounded-md text-lg"
+                        class="bg-[#242847] text-white p-2 cursor-pointer rounded-md text-base"
                     >
                         Cancel
                     </a>
                     <a
-                        type="submit"
-                        class="bg-[#29C782] text-white p-2 cursor-pointer rounded-md text-lg"
+                        class="bg-[#29C782] text-white p-2 cursor-pointer rounded-md text-base"
+                        onclick="handleEditBookFormSubmit(closeEditModal)"
                     >
                         Save Changes
                     </a>
@@ -246,8 +238,7 @@
             title,
             description,
             author,
-            createdAt,
-            publicationDate,
+            publicationdate,
             pages
         ) {
             document.getElementById("editModal").classList.remove("hidden");
@@ -255,10 +246,14 @@
             document.getElementById("editTitle").value = title;
             document.getElementById("editDescription").value = description;
             document.getElementById("editAuthor").value = author;
-            document.getElementById("editCreatedAt").value = createdAt;
-            document.getElementById("editPublicationDate").value =
-                publicationDate;
             document.getElementById("editPages").value = pages;
+
+            const formattedDate = new Date(publicationdate)
+                .toISOString()
+                .split("T")[0];
+
+            document.getElementById("editPublicationDate").value =
+                formattedDate;
 
             // Dynamically set the form action URL with the bookId
             document.getElementById(
@@ -272,54 +267,59 @@
             document.getElementById("editModal").classList.add("hidden");
         }
 
-        document
-            .getElementById("editBookForm")
-            .addEventListener("submit", function (event) {
-                event.preventDefault();
+        function handleEditBookFormSubmit(closeModalFunction) {
+            console.log("Handling form submission");
+            const bookId = document.getElementById("editBookId").value;
+            const title = document.getElementById("editTitle").value;
+            const description =
+                document.getElementById("editDescription").value;
+            const author = document.getElementById("editAuthor").value;
+            const publicationdate = document.getElementById(
+                "editPublicationDate"
+            ).value;
+            const pages = document.getElementById("editPages").value;
 
-                const id = document.getElementById("editBookId").value;
-                const title = document.getElementById("editTitle").value;
-                const description =
-                    document.getElementById("editDescription").value;
-                const author = document.getElementById("editAuthor").value;
-                const createdAt =
-                    document.getElementById("editCreatedAt").value;
-                const publicationDate = document.getElementById(
-                    "editPublicationDate"
-                ).value;
-                const pages = document.getElementById("editPages").value;
+            // Prepare the data to be sent
+            const bookData = {
+                title,
+                description,
+                author,
+                publicationdate,
+                pages,
+            };
 
-                // Prepare the data to be sent
-                const bookData = {
-                    title,
-                    description,
-                    author,
-                    createdAt,
-                    publicationDate,
-                    pages,
-                };
+            // Send data to the server using fetch
+            async function updateBook(id, bookData) {
+                try {
+                    const response = await fetch(`/admin/books/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(bookData),
+                    });
 
-                // Send data to the server using fetch
-                fetch(`/admin/books/${id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(bookData),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.success) {
-                            alert("Book updated successfully!");
-                            window.location.reload(); // Reload the page to reflect the changes
-                        } else {
-                            alert("Error updating book.");
-                        }
-                    })
-                    .catch((error) => console.error("Error:", error));
+                    const data = await response.json();
 
-                closeEditModal();
-            });
+                    if (data.success) {
+                        alert("Book updated successfully!");
+                        window.location.reload(); // Reload the page to reflect the changes
+                    } else {
+                        alert("Error updating book.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An unexpected error occurred.");
+                }
+            }
+
+            updateBook(bookId, bookData);
+
+            // Call the provided close modal function
+            if (typeof closeModalFunction === "function") {
+                closeModalFunction();
+            }
+        }
 
         async function deleteBook(bookId) {
             console.log("Deleting book with ID: ", bookId);
