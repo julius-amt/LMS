@@ -9,6 +9,7 @@ declare module "express-session" {
         authenticatedUser: {
             id: number;
             role: string;
+            name: string;
         };
     }
 }
@@ -22,6 +23,7 @@ class AuthController {
                 errors.array().map((err) => extractedErrors.push(err.msg));
 
                 res.status(400).render("auth/signup", {
+                    layout: false,
                     error: extractedErrors,
                 });
                 return;
@@ -33,6 +35,7 @@ class AuthController {
             const user = await User.findByEmail(email);
             if (user) {
                 res.status(400).render("auth/signup", {
+                    layout: false,
                     error: "Email already exists",
                 });
                 return;
@@ -51,6 +54,7 @@ class AuthController {
             );
         } catch (error) {
             res.status(500).render("auth/signup", {
+                layout: false,
                 error: "An error occurred, please try again",
             });
         }
@@ -88,20 +92,19 @@ class AuthController {
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
                 res.status(400).render("auth/login", {
+                    layout: false,
                     error: "Bad credentials",
                 });
                 return;
             }
+            console.log("-----------------------");
 
             req.session.authenticatedUser = {
                 id: user.id,
                 role: user.role,
+                name: user.name,
             };
-            // put username in localstorage
-            res.cookie("username", user.name, {
-                httpOnly: false,
-                maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-            });
+
             res.redirect("/books");
         } catch (error) {
             res.status(500).render("auth/login", {

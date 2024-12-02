@@ -5,16 +5,22 @@ class Book {
     private description: string;
     private author: string;
     private coverImage: string;
+    private publicationDate: Date;
+    private pages: number;
 
     constructor(
         title: string,
         description: string,
         author: string,
+        publicationDate: Date,
+        pages: number,
         coverImage?: string
     ) {
         this.title = title;
         this.description = description;
         this.author = author;
+        this.publicationDate = publicationDate;
+        this.pages = pages;
         this.coverImage = coverImage || "book-placeholder.png";
 
         Book.createTable();
@@ -28,6 +34,8 @@ class Book {
                     title VARCHAR(200) NOT NULL,
                     description VARCHAR(500) NOT NULL,
                     author VARCHAR(100) NOT NULL,
+                    publicationDate DATE,
+                    pages INT,
                     coverImage VARCHAR(200),
                     isAvailable BOOLEAN DEFAULT TRUE,
                     createdAt TIMESTAMP DEFAULT NOW()
@@ -44,8 +52,15 @@ class Book {
     async save() {
         try {
             await client.query(
-                `INSERT INTO books (title, description, author, coverImage) VALUES ($1, $2, $3, $4)`,
-                [this.title, this.description, this.author, this.coverImage]
+                `INSERT INTO books (title, description, author, publicationDate, pages, coverImage) VALUES ($1, $2, $3, $4, $5, $6)`,
+                [
+                    this.title,
+                    this.description,
+                    this.author,
+                    this.publicationDate,
+                    this.pages,
+                    this.coverImage,
+                ]
             );
 
             return 1;
@@ -84,7 +99,9 @@ class Book {
         description?: string,
         author?: string,
         coverImage?: string,
-        isAvailable?: boolean
+        isAvailable?: boolean,
+        publicationDate?: Date,
+        pages?: number
     ) {
         const setClause = [];
         const values = [];
@@ -108,6 +125,14 @@ class Book {
         if (isAvailable !== undefined) {
             setClause.push(`isAvailable = $${setClause.length + 1}`);
             values.push(isAvailable);
+        }
+        if (publicationDate) {
+            setClause.push(`publicationDate = $${setClause.length + 1}`);
+            values.push(publicationDate);
+        }
+        if (pages) {
+            setClause.push(`pages = $${setClause.length + 1}`);
+            values.push(pages);
         }
 
         if (setClause.length === 0) {

@@ -7,17 +7,20 @@ import { uploadImageMiddleware } from "../../utils/middleware/multer";
 const router = Router();
 
 router.get("/create", AdminBooksManagementController.getAddBookPage);
+
 router.post(
     "/create",
     uploadImageMiddleware.single("coverImage"),
     checkSchema(addBookValidationSchema),
     AdminBooksManagementController.addBooks
 );
+
 router.put(
-    "/edit/:id",
+    "/:bookId",
     checkSchema(addBookValidationSchema),
     AdminBooksManagementController.editBook
 );
+router.delete("/:bookId", AdminBooksManagementController.deleteBook);
 
 router.get("/list", AdminBooksManagementController.listBooks);
 

@@ -103,26 +103,6 @@ async function borrowBook(bookId) {
     }
 }
 
-function getNameFromCookies() {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${"username"}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
-}
-
-// Retrieve the username from the cookie
-let username = getNameFromCookies("username");
-
-if (username) {
-    username = decodeURIComponent(username);
-
-    document.getElementById(
-        "display-username-here"
-    ).textContent = `${username}`;
-} else {
-    document.getElementById("display-username-here").textContent = "Guest";
-}
-
 // logout functionality
 async function logoutUser() {
     try {

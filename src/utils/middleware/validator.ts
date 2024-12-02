@@ -83,4 +83,20 @@ export const addBookValidationSchema = {
             errorMessage: "Author should be a string",
         },
     },
+    publicationdate: {
+        notEmpty: {
+            errorMessage: "Publication date is required",
+        },
+        isDate: {
+            errorMessage: "Invalid date",
+        },
+    },
+    pages: {
+        notEmpty: {
+            errorMessage: "Pages is required",
+        },
+        isInt: {
+            errorMessage: "Pages should be a number",
+        },
+    },
 };

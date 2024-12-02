@@ -93,7 +93,6 @@ class AdminBooksManagementController {
                 "Error(s): ",
                 ...error.map((err) => err.msg),
             ];
-            console.log(error);
 
             return res.status(400).render("admin/addBooks", {
                 error: extractedErrors,
@@ -102,13 +101,24 @@ class AdminBooksManagementController {
 
         try {
             console.log("Adding book");
-            const { title, description, author } = matchedData(req);
+            const { title, description, author, publicationdate, pages } =
+                matchedData(req);
             const image = req.file;
             const coverImage = image ? image.filename : undefined;
-            const book = new Book(title, description, author, coverImage);
+
+            const book = new Book(
+                title,
+                description,
+                author,
+                publicationdate,
+                pages,
+                coverImage
+            );
             await book.save();
 
-            res.redirect("/admin/books/list");
+            res.redirect(
+                "/admin/books/list?message=Book+added+successfully%21+%F0%9F%93%9A"
+            );
         } catch (err) {
             return res.status(500).render("admin/addBooks", {
                 error: ["An error occurred while saving the book."],
@@ -123,6 +133,22 @@ class AdminBooksManagementController {
     static async listBooks(req: Request, res: Response) {
         const books = await Book.findAll();
         res.render("admin/listBooks", { books });
+    }
+
+    // delete book endpoint handler
+    static async deleteBook(req: Request, res: Response) {
+        const { bookId } = req.params;
+
+        const response = await Book.findOneAndDelete(parseInt(bookId));
+        if (!response) {
+            res.status(500).json({ message: "An error occurred" });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Book deleted successfully",
+            success: true,
+        });
     }
 
     static async editBook(req: Request, res: Response) {

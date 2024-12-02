@@ -67,7 +67,6 @@ class User {
     }
 
     static async findByEmail(email: string) {
-        console.log("----------------------", email);
         try {
             const result = await client.query(
                 `SELECT * FROM users WHERE email = $1`,

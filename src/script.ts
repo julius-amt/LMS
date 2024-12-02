@@ -10,6 +10,7 @@ import {
     authenticateUserMiddleware,
     authenticateAdminMiddleware,
 } from "./utils/middleware/authenticateUser";
+import { addSessionDataToLocals } from "./utils/middleware/addDataToLocals";
 
 const app = express();
 const PORT = 3000;
@@ -20,7 +21,7 @@ const store = new session.MemoryStore();
 app.use(
     session({
         secret: "secret",
-        cookie: { maxAge: 24 * 60 * 60 * 1000 },
+        cookie: { maxAge: 24 * 60 * 60 * 1000, secure: false },
         saveUninitialized: false,
         resave: false,
         store,
@@ -40,7 +41,7 @@ app.set("layout", "layouts/layout");
 app.use("/auth", AuthRouter);
 
 // middlware to authenticate user
-app.use(authenticateUserMiddleware);
+app.use(authenticateUserMiddleware, addSessionDataToLocals);
 app.use("/books/", BooksRouter);
 
 // middleware to authenticate admin
