@@ -3,10 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            <%= typeof pageTitle !== 'undefined' ? pageTitle : 'My Application'
-            %>
-        </title>
+        <title>Library Management System</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="flex min-h-screen bg-gray-100">
@@ -27,7 +24,6 @@
                             href="/books"
                             class="flex items-center font-black p-2 text-[#29C782] hover:bg-[#29C782] hover:text-white rounded-lg transition duration-300 gap-3"
                         >
-                            <i data-feather="book" class="mr-3 w-5 h-5"></i>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -48,10 +44,9 @@
                     </li>
                     <li>
                         <a
-                            href="/books/manage"
+                            href="/books/me/history"
                             class="flex items-center font-black p-2 text-[#29C782] hover:bg-[#29C782] hover:text-white rounded-lg transition duration-300 gap-3"
                         >
-                            <i data-feather="user" class="mr-3 w-5 h-5"></i>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -63,11 +58,10 @@
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                                 />
                             </svg>
-
-                            Manage Books
+                            My History
                         </a>
                     </li>
                 </ul>
@@ -75,7 +69,7 @@
 
             <!-- User Profile/Logout Section -->
             <div
-                class="absolute bottom-0 left-0 right-0 p-4 border-t bg-[#242847] flex items-center justify-end"
+                class="absolute bottom-0 left-0 right-0 px-2 py-4 border-t bg-[#242847] flex items-center gap-2"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -83,8 +77,28 @@
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="size-6 cursor-pointer text-white"
+                    class="size-6 text-gray-300"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                </svg>
+
+                <p
+                    class="text-white font-base text-lg grow text-gray-300"
+                    id="display-username-here"
+                ></p>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 cursor-pointer text-white text-gray-300"
                     title="Logout"
+                    onclick="logoutUser()"
                 >
                     <path
                         stroke-linecap="round"
@@ -111,9 +125,6 @@
             </footer>
         </div>
 
-        <script>
-            // Initialize Feather Icons
-            feather.replace();
-        </script>
+        <script src="/js/index.js"></script>
     </body>
 </html>

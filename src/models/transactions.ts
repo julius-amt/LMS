@@ -21,6 +21,7 @@ class Transaction {
                     userId INTEGER NOT NULL,
                     bookId INTEGER NOT NULL,
                     status VARCHAR(10) NOT NULL,
+                    returndate TIMESTAMP,
                     createdAt TIMESTAMP DEFAULT NOW()
                 )`);
         } catch (error) {
@@ -60,6 +61,30 @@ class Transaction {
             return results.rows;
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    static async findByUserId(userId: number) {
+        try {
+            const results = await client.query(
+                `
+                SELECT 
+                    transactions.id AS transactionId,
+                    transactions.returndate,
+                    transactions.createdAt AS transactionCreatedAt,
+                    transactions.status,
+                    books.title,
+                    books.author,
+                    books.createdAt AS bookCreatedAt
+                FROM transactions
+                INNER JOIN books ON transactions.bookId = books.id
+                WHERE transactions.userId = $1
+                `,
+                [userId]
+            );
+            return results.rows;
+        } catch (error) {
+            console.error("Error fetching transactions for user:", error);
         }
     }
 }

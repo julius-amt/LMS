@@ -6,6 +6,10 @@ import { BooksRouter } from "./routers/books";
 import { AdminBooksManagementRouter } from "./routers/admin/books";
 import { AuthRouter } from "./routers/auth";
 import expressLayouts from "express-ejs-layouts";
+import {
+    authenticateUserMiddleware,
+    authenticateAdminMiddleware,
+} from "./utils/middleware/authenticateUser";
 
 const app = express();
 const PORT = 3000;
@@ -31,10 +35,16 @@ app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.resolve(__dirname, "public")));
 app.use(expressLayouts);
+
 app.set("layout", "layouts/layout");
 app.use("/auth", AuthRouter);
 
+// middlware to authenticate user
+app.use(authenticateUserMiddleware);
 app.use("/books/", BooksRouter);
+
+// middleware to authenticate admin
+app.use(authenticateAdminMiddleware);
 app.use("/admin/books/", AdminBooksManagementRouter);
 
 app.listen(PORT, () => {

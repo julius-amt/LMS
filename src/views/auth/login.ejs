@@ -6,15 +6,18 @@
         <title>Library Management System - Login</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-md w-96">
-            <h2 class="text-center text-3xl font-bold mb-6 text-gray-700">
-                Login
-            </h2>
+    <body class="bg-[#242847] flex items-center justify-center min-h-screen">
+        <div class="bg-white p-12 rounded-2xl shadow-2xl w-[500px]">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <img src="/icon.png" alt="icon" class="h-12 w-12" />
+                <h2 class="text-center text-4xl font-bold text-[#242847]">
+                    Welcome Back
+                </h2>
+            </div>
 
             <% if (typeof error !== 'undefined' && error) { %>
             <div
-                class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6"
                 role="alert"
             >
                 <%= error %>
@@ -22,72 +25,106 @@
             <% } %>
 
             <form action="/auth/login" method="POST">
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-600 mb-2"
-                        >Email Address</label
+                <div class="mb-6 relative">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="absolute h-6 w-6 text-gray-500 left-4 top-1/2 transform -translate-y-1/2"
                     >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"
+                        />
+                    </svg>
                     <input
                         type="email"
                         id="email"
                         name="email"
+                        placeholder="Email Address"
                         required
                         value="<%= typeof email !== 'undefined' ? email : '' %>"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        class="w-full px-12 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782] text-[#242847] text-lg"
                     />
                 </div>
 
-                <div class="mb-6">
-                    <label for="password" class="block text-gray-600 mb-2"
-                        >Password</label
+                <div class="mb-6 relative">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="absolute h-6 w-6 text-gray-500 left-4 top-1/2 transform -translate-y-1/2"
                     >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"
+                        />
+                    </svg>
                     <input
                         type="password"
                         id="password"
                         name="password"
+                        placeholder="Password"
                         required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        class="w-full px-12 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782] text-[#242847] text-lg"
                     />
                 </div>
 
-                <div class="mb-6 flex items-center justify-between">
+                <div class="mb-6 flex items-center justify-start">
                     <div class="flex items-center">
                         <input
                             type="checkbox"
                             id="remember"
                             name="remember"
-                            class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                            class="h-5 w-5 text-[#29C782] focus:ring-[#29C782] border-gray-300 rounded"
                         />
                         <label
                             for="remember"
-                            class="ml-2 block text-sm text-gray-900"
+                            class="ml-2 block text-lg text-[#242847]"
                         >
                             Remember me
                         </label>
                     </div>
-                    <div class="text-sm">
+                    <!-- <div class="text-lg">
                         <a
                             href="/forgot-password"
-                            class="text-gray-600 hover:text-gray-500"
+                            class="text-[#29C782] hover:text-[#242847]"
                         >
                             Forgot password?
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <button
                     type="submit"
-                    class="w-full bg-gray-700 text-white py-2 rounded-md hover:bg-gray-600 transition duration-300"
+                    class="w-full bg-[#29C782] text-white py-4 rounded-lg text-xl font-semibold hover:bg-[#1ea96a] transition duration-300"
                 >
                     Sign In
                 </button>
             </form>
 
-            <p class="text-center mt-4 text-sm text-gray-600">
+            <p class="text-center mt-8 text-lg text-[#242847]">
                 Don't have an account?
-                <a href="/auth/signup" class="text-gray-700 hover:underline"
+                <a href="/auth/signup" class="text-[#29C782] hover:underline"
                     >Sign Up</a
                 >
             </p>
         </div>
+        <script>
+            // Check if there's a 'message' in the query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get("message");
+
+            // If message exists, display it in an alert
+            if (message) {
+                alert(decodeURIComponent(message)); // Decode the URL-encoded message
+            }
+        </script>
     </body>
 </html>

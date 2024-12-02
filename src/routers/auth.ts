@@ -21,5 +21,6 @@ router.post(
     checkSchema(loginValidationSchema),
     AuthController.loginUser
 );
+router.post("/logout", AuthController.logoutUser);
 
 export { router as AuthRouter };

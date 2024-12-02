@@ -46,7 +46,9 @@ class AuthController {
             const newUser = new User(name, email, hashPassword, "user");
             await newUser.save();
 
-            res.redirect("/auth/login");
+            res.redirect(
+                "/auth/login?message=User+created+successfully%21+%F0%9F%93%9A"
+            );
         } catch (error) {
             res.status(500).render("auth/signup", {
                 error: "An error occurred, please try again",
@@ -55,7 +57,7 @@ class AuthController {
     }
 
     static getSignupPage(req: Request, res: Response) {
-        res.render("auth/signup", { error: null });
+        res.render("auth/signup", { layout: false, error: null });
     }
 
     static async loginUser(req: Request, res: Response) {
@@ -95,6 +97,11 @@ class AuthController {
                 id: user.id,
                 role: user.role,
             };
+            // put username in localstorage
+            res.cookie("username", user.name, {
+                httpOnly: false,
+                maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+            });
             res.redirect("/books");
         } catch (error) {
             res.status(500).render("auth/login", {
@@ -104,7 +111,27 @@ class AuthController {
     }
 
     static getLoginPage(req: Request, res: Response) {
-        res.render("auth/login");
+        res.render("auth/login", {
+            layout: false,
+            message: "User created successfully! 📚",
+            showAlert: true,
+        });
+    }
+
+    // logout endpint
+    static logoutUser(req: Request, res: Response) {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).send("Error logging out.");
+            }
+
+            res.clearCookie("connect.username");
+
+            res.status(200).json({
+                message: "Logged out successfully!",
+                success: true,
+            });
+        });
     }
 }
 

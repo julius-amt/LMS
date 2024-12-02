@@ -15,7 +15,8 @@ class BooksController {
         const book = await Book.findById(parseInt(id));
 
         if (!book) {
-            return res.status(404).render("404");
+            res.status(404).render("bookDetail", { error: "Book not found" });
+            return;
         }
 
         // fetch other books excluding the current book
@@ -24,11 +25,10 @@ class BooksController {
             (b) => b.id !== book.id
         );
 
-        console.log("Book to be viewd: ", book);
-
         res.render("bookDetail", { book, otherBooksExcludingCurrent });
     }
 
+    // Borrow a book endpoint handler
     static async borrowBook(req: Request, res: Response) {
         const { id } = req.params;
 
@@ -38,13 +38,14 @@ class BooksController {
             return;
         }
 
+        // mark the book as borrowed
         const response = await Book.findOneAndUpdate(
             parseInt(id),
             undefined,
             undefined,
             undefined,
             undefined,
-            true
+            false
         );
 
         if (!response) {
@@ -52,10 +53,34 @@ class BooksController {
             return;
         }
 
+        // create a transaction
+        const user = req.session?.authenticatedUser;
+        const transaction = new Transaction(user!.id, parseInt(id), "borrowed");
+        await transaction.save();
+
         res.status(200).json({
             message: "Book borrowed successfully",
             success: true,
         });
+    }
+
+    static async borrowHistory(req: Request, res: Response) {
+        const userId = req.session?.authenticatedUser?.id;
+        console.log(`User ID: ${userId}`);
+        if (!userId) {
+            res.status(401).json({ message: "Unauthorized" });
+            return;
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        const transactions = await Transaction.findByUserId(userId);
+        console.log(transactions);
+        res.render("history", { transactions });
     }
 }
 

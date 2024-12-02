@@ -19,13 +19,27 @@
 
             <!-- Search and Filter Section -->
             <div class="mb-6 flex justify-between items-center">
-                <div class="w-full max-w-md">
+                <div class="w-full max-w-md flex items-center relative">
                     <input
                         type="text"
                         id="searchInput"
-                        placeholder="Search books by title, author, or description of the book"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                        placeholder="Search books by title, author, or description"
+                        class="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                     />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer h-5 w-5 search-icon"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                        />
+                    </svg>
                 </div>
 
                 <div class="ml-4">
@@ -113,14 +127,14 @@
                         const author = card
                             .querySelector("p")
                             .textContent.toLowerCase();
-                        const genre = card
-                            .querySelector(".text-gray-500")
+                        const description = card
+                            .querySelector("p.text-gray-500")
                             .textContent.toLowerCase();
 
                         const isVisible =
                             title.includes(searchTerm) ||
                             author.includes(searchTerm) ||
-                            genre.includes(searchTerm);
+                            description.includes(searchTerm);
 
                         card.style.display = isVisible ? "block" : "none";
                         visibleBooks += isVisible ? 1 : 0;

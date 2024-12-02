@@ -1,0 +1,63 @@
+<div class="container p-4">
+    <!-- Page Title -->
+    <h1 class="text-3xl font-bold text-[#242847] mb-8">Loan History</h1>
+
+    <!-- Table -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <table
+            class="min-w-full table-auto text-left border-collapse border-spacing-0"
+        >
+            <thead>
+                <tr class="bg-[#242847] text-white">
+                    <th class="px-6 py-4 text-sm font-medium">#</th>
+                    <th class="px-6 py-4 text-sm font-medium">Title</th>
+                    <th class="px-6 py-4 text-sm font-medium">Author</th>
+                    <th class="px-6 py-4 text-sm font-medium">Borrowed Date</th>
+                    <th class="px-6 py-4 text-sm font-medium">Return Date</th>
+                    <th class="px-6 py-4 text-sm font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (transactions && transactions.length > 0) { %> <%
+                transactions.forEach((book, index) => { %>
+                <tr class="border-b last:border-b-0 hover:bg-[#f3f4f6]">
+                    <td class="px-6 py-4 text-sm text-[#242847] font-medium">
+                        <%= index + 1 %>
+                    </td>
+                    <td class="px-6 py-4 text-sm"><%= book.title %></td>
+                    <td class="px-6 py-4 text-sm"><%= book.author %></td>
+                    <td class="px-6 py-4 text-sm">
+                        <%= book.bookcreatedat && new
+                        Date(book.bookcreatedat).toLocaleDateString("en-GB", {
+                        year: "numeric", month: "short", day: "numeric", }) %>
+                    </td>
+                    <td class="px-6 py-4 text-sm">
+                        <%= book.returndate ? new
+                        Date(book.returndate).toLocaleDateString("en-GB", {
+                        year: "numeric", month: "short", day: "numeric", }) :
+                        'N/A' %>
+                    </td>
+                    <td class="px-6 py-4 text-sm">
+                        <% if (book.status === 'Returned') { %>
+                        <span
+                            class="bg-[#29C782] text-white px-2 py-1 rounded-md"
+                            >Returned</span
+                        >
+                        <% } else { %>
+                        <span class="bg-red-500 text-white px-2 py-1 rounded-md"
+                            >Borrowed</span
+                        >
+                        <% } %>
+                    </td>
+                </tr>
+                <% }); %> <% } else { %>
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                        No history found.
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

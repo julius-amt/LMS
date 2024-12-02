@@ -7,5 +7,6 @@ router.get("/", BooksController.browseBooks);
 router.get("/:id", BooksController.bookDetail);
 // borrow book
 router.post("/:id/borrow", BooksController.borrowBook);
+router.get("/me/history", BooksController.borrowHistory);
 
 export { router as BooksRouter };
