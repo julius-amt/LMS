@@ -40,6 +40,10 @@ The LMS frontend is designed to be intuitive and user-friendly, ensuring a smoot
 
 <img src="./src/public/landingPage.png">
 
+## Single Book Page
+
+<img src="./src/public/bookpage.png">
+
 ## **Implementation Details**
 
 ### **MVC Architecture:**
