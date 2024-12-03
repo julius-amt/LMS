@@ -128,6 +128,39 @@ class Transaction {
             return 0;
         }
     }
+
+    static async countTransactions() {
+        try {
+            const result = await client.query(
+                `SELECT COUNT(*) FROM transactions`
+            );
+            return result.rows[0].count;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    static async countBorrowedBooks() {
+        try {
+            const result = await client.query(
+                `SELECT COUNT(*) FROM transactions WHERE status = 'borrowed'`
+            );
+            return result.rows[0].count;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    static async countUniqueUsers() {
+        try {
+            const result = await client.query(
+                `SELECT COUNT(DISTINCT userId) FROM transactions`
+            );
+            return result.rows[0].count;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 export default Transaction;

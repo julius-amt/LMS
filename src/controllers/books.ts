@@ -239,6 +239,10 @@ class AdminBooksManagementController {
             message: "Book returned successfully",
         });
     }
+
+    static async getReport(req: Request, res: Response) {
+        res.render("admin/report", {});
+    }
 }
 
 export { BooksController, AdminBooksManagementController };

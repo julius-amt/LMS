@@ -178,6 +178,16 @@ class Book {
             return 0;
         }
     }
+
+    static async countBooks() {
+        try {
+            const result = await client.query(`SELECT COUNT(*) FROM books`);
+
+            return result.rows[0].count;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 export default Book;

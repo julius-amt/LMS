@@ -77,6 +77,15 @@ class User {
             console.error(error);
         }
     }
+
+    static async countUsers() {
+        try {
+            const result = await client.query(`SELECT COUNT(*) FROM users`);
+            return result.rows[0].count;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 export default User;

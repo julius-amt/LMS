@@ -11,6 +11,7 @@ import {
     authenticateAdminMiddleware,
 } from "./utils/middleware/authenticateUser";
 import { addSessionDataToLocals } from "./utils/middleware/addDataToLocals";
+import { AdminReportRouter } from "./routers/admin/report";
 
 const app = express();
 const PORT = 3000;
@@ -47,6 +48,7 @@ app.use("/books/", BooksRouter);
 // middleware to authenticate admin
 app.use(authenticateAdminMiddleware);
 app.use("/admin/books/", AdminBooksManagementRouter);
+app.use("/admin/report/", AdminReportRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

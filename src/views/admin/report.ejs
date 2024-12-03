@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Library Report</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="min-h-screen bg-gray-900 text-white font-sans">
+        <div id="report-page" class="container mx-auto py-10 px-5">
+            <h1 class="text-center text-4xl font-bold mb-8 text-[#242847]">
+                SmartShelf Library Report
+            </h1>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Total Users Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/?size=100&id=11168&format=png&color=242847"
+                        alt="Users Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">Total Users</h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= usersCount %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Total Books Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/fluency/96/book.png"
+                        alt="Books Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">Total Books</h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= booksCount %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Total Transactions Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/fluency/96/transaction-list.png"
+                        alt="Transactions Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">Total Transactions</h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= transactionsCount %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Books Borrowed Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/fluency/96/open-book.png"
+                        alt="Borrowed Books Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">Books Borrowed</h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= borrowedBooksCount %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Books Returned Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/fluency/96/return-purchase.png"
+                        alt="Returned Books Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">Books Returned</h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= returnedBooksCount %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Users Who Borrowed Books Card -->
+                <div
+                    class="p-6 bg-white rounded-lg shadow-md text-black flex items-center space-x-4"
+                >
+                    <img
+                        src="https://img.icons8.com/?size=100&id=45617&format=png&color=000000"
+                        alt="Users Borrowed Icon"
+                        class="w-16 h-16"
+                    />
+                    <div>
+                        <h2 class="text-xl font-bold">
+                            Users Who Borrowed Books
+                        </h2>
+                        <p class="text-2xl font-bold text-[#29C782]">
+                            <%= usersWhoBorrowedBooks %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <div class="text-center mt-10">
+                <button
+                    id="download-pdf"
+                    class="py-3 px-6 text-xl font-bold bg-[#29C782] rounded-lg border border-[#29C782] text-white hover:bg-[#242847] hover:text-white transition duration-300"
+                >
+                    Download Report
+                </button>
+            </div>
+        </div>
+
+        <script>
+            // Download as PDF functionality
+            document
+                .getElementById("download-pdf")
+                .addEventListener("click", function () {
+                    const element = document.getElementById("report-page");
+                    const options = {
+                        margin: 1,
+                        filename: "library_report.pdf",
+                        image: { type: "jpeg", quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: {
+                            unit: "in",
+                            format: "letter",
+                            orientation: "portrait",
+                        },
+                    };
+                    html2pdf().set(options).from(element).save();
+                });
+        </script>
+    </body>
+</html>

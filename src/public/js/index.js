@@ -115,8 +115,8 @@ async function logoutUser() {
         const data = await response.json();
 
         if (data.success) {
-            alert(data.message);
             window.location.href = "/auth/login"; // replace with your login URL
+            alert(data.message);
         } else {
             alert("Logout failed. Please try again.");
         }
