@@ -1,0 +1,110 @@
+<body class="bg-gray-100">
+    <!-- Main Content Section -->
+    <div class="container mx-5">
+        <div class="bg-white rounded-lg shadow-lg">
+            <h1 class="text-3xl font-semibold pl-6 py-4 text-gray-800">
+                Borrowed Books Transactions
+            </h1>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white text-center table-auto">
+                    <thead class="bg-[#242847] text-white">
+                        <tr>
+                            <th class="px-6 py-3">ID</th>
+                            <th class="px-6 py-3">Title</th>
+                            <th class="px-6 py-3">Borrowed By</th>
+                            <th class="px-6 py-3">Borrowed On</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3">Returned On</th>
+                            <th class="px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% transactions && transactions.forEach((transaction,
+                        index) => { %>
+                        <tr class="border-b">
+                            <td class="px-6 py-4"><%= index + 1 %></td>
+                            <td
+                                class="px-6 py-4"
+                                title="<%= transaction.title %>"
+                            >
+                                <%= transaction.title.length > 60 ?
+                                transaction.title.slice(0, 60) + '...' :
+                                transaction.title %>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <%= transaction.username %>
+                            </td>
+                            <td class="px-6 py-4">
+                                <%= new
+                                Date(transaction.transactioncreatedat).toLocaleDateString('en-US',
+                                { year: 'numeric', month: 'short', day:
+                                'numeric' }) %>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <span
+                                    class="<%= transaction.status === 'returned' ? 'text-green-500' : 'text-red-500' %> font-bold"
+                                >
+                                    <%= transaction.status %>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <%= transaction.returndate ? new
+                                Date(transaction.returndate).toLocaleDateString('en-US',
+                                { year: 'numeric', month: 'short', day:
+                                'numeric' }) : 'Not Returned' %>
+                            </td>
+                            <td class="px-6 py-4">
+                                <% if (transaction.status !== 'returned') { %>
+                                <button
+                                    onclick="markAsReturned('<%= transaction.transactionid %>')"
+                                    class="bg-[#29C782] text-white px-4 py-2 rounded-lg hover:bg-[#242847] cursor-pointer"
+                                >
+                                    Mark as Returned
+                                </button>
+                                <% } else { %>
+                                <span class="text-green-500 font-bold">
+                                    Returned
+                                </span>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function markAsReturned(transactionId) {
+            if (
+                confirm("Are you sure you want to mark this book as returned?")
+            ) {
+                try {
+                    const response = await fetch(
+                        `/admin/books/transactions/${transactionId}/returned`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+
+                    if (response.ok) {
+                        alert("Book marked as returned.");
+                        location.reload();
+                    } else {
+                        alert("Error marking the book as returned.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error marking the book as returned.");
+                }
+            }
+        }
+    </script>
+</body>

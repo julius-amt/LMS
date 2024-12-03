@@ -42,7 +42,6 @@ class Book {
                     createdAt TIMESTAMP DEFAULT NOW()
                 )`
             );
-            console.log("User table created!");
             return 1;
         } catch (error) {
             console.error(error);
@@ -94,63 +93,42 @@ class Book {
         }
     }
 
-    static async findOneAndUpdate({
-        id,
-        title,
-        description,
-        author,
-        isAvailable,
-        publicationDate,
-        pages,
-    }: UpdateBookDataType) {
-        const setClause = [];
+    static async findOneAndUpdate(updateData: UpdateBookDataType) {
+        const { id, ...fieldsToUpdate } = updateData;
+
+        // Ensure there's an ID and at least one field to update
+        if (!id) throw new Error("ID is required to update the book.");
+        if (!Object.keys(fieldsToUpdate).length)
+            throw new Error("No fields to update.");
+
+        // Construct the SET clause dynamically
+        const setClause: string[] = [];
         const values = [];
 
-        if (title) {
-            setClause.push(`title = $${setClause.length + 1}`);
-            values.push(title);
-        }
-        if (description) {
-            setClause.push(`description = $${setClause.length + 1}`);
-            values.push(description);
-        }
-        if (author) {
-            setClause.push(`author = $${setClause.length + 1}`);
-            values.push(author);
-        }
+        Object.entries(fieldsToUpdate).forEach(([key, value]) => {
+            if (value !== undefined) {
+                // Skip undefined values
+                setClause.push(`${key} = $${setClause.length + 1}`);
+                values.push(value);
+            }
+        });
 
-        if (isAvailable !== undefined) {
-            setClause.push(`isAvailable = $${setClause.length + 1}`);
-            values.push(isAvailable);
-        }
-        if (publicationDate) {
-            setClause.push(`publicationDate = $${setClause.length + 1}`);
-            values.push(publicationDate);
-        }
-        if (pages) {
-            setClause.push(`pages = $${setClause.length + 1}`);
-            values.push(pages);
-        }
+        // Add the ID as the last parameter
+        values.push(id);
 
-        if (setClause.length === 0) {
-            throw new Error("No fields to update.");
-        }
-
-        // Construct the final query string
         const query = `
             UPDATE books
             SET ${setClause.join(", ")}
             WHERE id = $${setClause.length + 1}
             RETURNING *;
         `;
-        values.push(id); // Add id as the last value
 
         try {
-            await client.query(query, values);
-            return 1;
+            const result = await client.query(query, values);
+            return result.rows[0];
         } catch (error) {
-            console.error(error);
-            return 0;
+            console.error("Error updating book:", error);
+            throw new Error("Failed to update the book.");
         }
     }
 

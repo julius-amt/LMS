@@ -1,4 +1,5 @@
 import { client } from "../utils/dbConfig";
+import { TransactionDataType } from "../utils/types/book-update";
 
 class Transaction {
     private userId: number;
@@ -64,10 +65,10 @@ class Transaction {
                     transactions.createdAt AS transactionCreatedAt,
                     transactions.status,
                     books.title,
-                    books.author,
-                    books.createdAt AS bookCreatedAt
+                    users.name AS userName
                 FROM transactions
                 INNER JOIN books ON transactions.bookId = books.id
+                INNER JOIN users ON transactions.userId = users.id
                 `);
             return results.rows;
         } catch (error) {
@@ -96,6 +97,35 @@ class Transaction {
             return results.rows;
         } catch (error) {
             console.error("Error fetching transactions for user:", error);
+        }
+    }
+
+    static async findOneAndUpdate({
+        id,
+        status,
+        returnedDate,
+    }: TransactionDataType) {
+        try {
+            const result = await client.query(
+                `
+                UPDATE transactions
+                SET status = $2, returndate = $3
+                WHERE id = $1
+                RETURNING *;
+                `,
+                [id, status, returnedDate]
+            );
+
+            if (result.rowCount === 0) {
+                console.log(`No transaction found with id: ${id}`);
+                return 0;
+            }
+
+            console.log("Transaction updated successfully:", result.rows[0]);
+            return 1;
+        } catch (error) {
+            console.error("Error updating transaction:", error);
+            return 0;
         }
     }
 }

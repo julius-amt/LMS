@@ -64,7 +64,6 @@ class BooksController {
 
     static async borrowHistory(req: Request, res: Response) {
         const userId = req.session?.authenticatedUser?.id;
-        console.log(`User ID: ${userId}`);
         if (!userId) {
             res.status(401).json({ message: "Unauthorized" });
             return;
@@ -77,7 +76,6 @@ class BooksController {
         }
 
         const transactions = await Transaction.findByUserId(userId);
-        console.log(transactions);
         res.render("history", { transactions });
     }
 }
@@ -203,6 +201,43 @@ class AdminBooksManagementController {
     static async getTransactions(req: Request, res: Response) {
         const transactions = await Transaction.findAll();
         res.render("admin/transactions", { transactions });
+    }
+
+    static async returnBook(req: Request, res: Response) {
+        const { transactionId } = req.params;
+
+        const transaction = await Transaction.findById(parseInt(transactionId));
+        if (!transaction) {
+            res.status(404).json({ message: "Transaction not found" });
+            return;
+        }
+
+        const response = await Transaction.findOneAndUpdate({
+            id: parseInt(transactionId),
+            status: "returned",
+            returnedDate: new Date().toISOString(),
+        });
+
+        if (!response) {
+            res.status(500).json({ message: "An error occurred" });
+            return;
+        }
+
+        // mark the book as available
+        const book = await Book.findOneAndUpdate({
+            id: transaction.bookid,
+            isAvailable: true,
+        });
+
+        if (!book) {
+            res.status(500).json({ message: "An error occurred" });
+            return;
+        }
+
+        res.status(200).render("admin/transactions", {
+            transactions: await Transaction.findAll(),
+            message: "Book returned successfully",
+        });
     }
 }
 

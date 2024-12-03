@@ -97,7 +97,6 @@ class AuthController {
                 });
                 return;
             }
-            console.log("-----------------------");
 
             req.session.authenticatedUser = {
                 id: user.id,

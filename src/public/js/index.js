@@ -74,7 +74,6 @@ document.querySelectorAll(".view-details-btn").forEach((btn) => {
 async function borrowBook(bookId) {
     // const bookId = borrowButton.getAtctribute("data-book-id");
 
-    console.log("Borrowing book with ID:", bookId);
     if (!bookId) {
         console.error("Book ID not found.");
         return;
@@ -124,5 +123,31 @@ async function logoutUser() {
     } catch (error) {
         console.error("Error logging out:", error);
         alert("Error logging out. Please try again.");
+    }
+}
+
+// delete book functionality
+async function deleteBook(bookId) {
+    const confirmation = confirm("Are you sure you want to delete this book?");
+
+    if (confirmation) {
+        try {
+            const response = await fetch(
+                `
+                    /admin/books/${bookId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (response.ok) {
+                alert("Book deleted successfully");
+                window.location.reload();
+            } else {
+                alert("Failed to delete book, please try again");
+            }
+        } catch (error) {
+            alert("Error deleting book, try again later");
+        }
     }
 }

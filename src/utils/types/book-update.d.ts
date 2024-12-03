@@ -7,3 +7,9 @@ export interface UpdateBookDataType {
     pages?: number;
     isAvailable?: boolean;
 }
+
+export interface TransactionDataType {
+    id: number;
+    status: string;
+    returnedDate: string;
+}
