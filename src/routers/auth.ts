@@ -5,9 +5,13 @@ import {
     loginValidationSchema,
 } from "../utils/middleware/validator";
 import { checkSchema } from "express-validator";
+import { denyAuthUserFromAccessingUnprotectedRoutes } from "../utils/middleware/authenticateUser";
 
 const router = Router();
 
+router.post("/logout", AuthController.logoutUser);
+
+router.use(denyAuthUserFromAccessingUnprotectedRoutes);
 router.get("/signup", AuthController.getSignupPage);
 router.post(
     "/signup",
@@ -21,6 +25,5 @@ router.post(
     checkSchema(loginValidationSchema),
     AuthController.loginUser
 );
-router.post("/logout", AuthController.logoutUser);
 
 export { router as AuthRouter };

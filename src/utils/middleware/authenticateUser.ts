@@ -25,3 +25,14 @@ export const authenticateAdminMiddleware = (
 
     res.status(403).send("Access denied. Admins only.");
 };
+
+export const denyAuthUserFromAccessingUnprotectedRoutes = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (!req.session?.authenticatedUser) {
+        return next();
+    }
+    res.redirect("/books/");
+};

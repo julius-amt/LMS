@@ -65,18 +65,22 @@ class AuthController {
     }
 
     static async loginUser(req: Request, res: Response) {
+        console.log("Login process started");
         try {
             const errors = validationResult(req);
+            console.log("After validation results");
             if (!errors.isEmpty()) {
                 const extractedErrors: string[] = ["Error(s): "];
                 errors.array().map((err) => extractedErrors.push(err.msg));
 
                 res.status(400).render("auth/login", {
                     error: extractedErrors,
+                    layout: false,
                 });
                 return;
             }
 
+            console.log("Getting body from matcher");
             const { email, password } = matchedData(req);
 
             // verify if email exists
@@ -84,11 +88,13 @@ class AuthController {
             if (!user) {
                 res.status(400).render("auth/login", {
                     error: "Bad credentials",
+                    layout: false,
                 });
                 return;
             }
 
             // verify password
+            console.log("Validating password");
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
                 res.status(400).render("auth/login", {
@@ -104,10 +110,12 @@ class AuthController {
                 name: user.name,
             };
 
+            console.log("---------------------------------");
             res.redirect("/books");
         } catch (error) {
             res.status(500).render("auth/login", {
                 error: "An error occurred, please try again",
+                layout: false,
             });
         }
     }
@@ -124,10 +132,11 @@ class AuthController {
     static logoutUser(req: Request, res: Response) {
         req.session.destroy((err) => {
             if (err) {
-                return res.status(500).send("Error logging out.");
+                res.status(500).send("Error logging out.");
+                return;
             }
 
-            res.clearCookie("connect.username");
+            res.clearCookie("connect.sid");
 
             res.status(200).json({
                 message: "Logged out successfully!",

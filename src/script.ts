@@ -12,6 +12,7 @@ import {
 } from "./utils/middleware/authenticateUser";
 import { addSessionDataToLocals } from "./utils/middleware/addDataToLocals";
 import { AdminReportRouter } from "./routers/admin/report";
+import { _404Router } from "./routers/404";
 
 const app = express();
 const PORT = 3000;
@@ -49,6 +50,10 @@ app.use("/books/", BooksRouter);
 app.use(authenticateAdminMiddleware);
 app.use("/admin/books/", AdminBooksManagementRouter);
 app.use("/admin/report/", AdminReportRouter);
+
+// handle 404
+console.log("404 routes handling request");
+app.use("*", _404Router);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

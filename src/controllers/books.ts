@@ -9,25 +9,30 @@ import path from "path";
 class BooksController {
     static async browseBooks(req: Request, res: Response) {
         const books = await Book.findAll();
-        res.render("books", { books });
+        res.render("books", { books, layout: "layouts/layout" });
     }
 
     static async bookDetail(req: Request, res: Response) {
         const { id } = req.params;
+        const isANumber = parseInt(id);
+        if (isNaN(isANumber)) {
+            res.status(404).render("404", { layout: false });
+            return;
+        }
         const book = await Book.findById(parseInt(id));
 
         if (!book) {
-            res.status(404).render("bookDetail", { error: "Book not found" });
+            res.status(404).render("404", { layout: false });
             return;
         }
 
         // fetch other books excluding the current book
         const otherBooks = await Book.findAll();
-        const otherBooksExcludingCurrent = otherBooks?.filter(
+        const otherBooksExcludingCurrentBook = otherBooks?.filter(
             (b) => b.id !== book.id
         );
 
-        res.render("bookDetail", { book, otherBooksExcludingCurrent });
+        res.render("bookDetail", { book, otherBooksExcludingCurrentBook });
     }
 
     // Borrow a book endpoint handler

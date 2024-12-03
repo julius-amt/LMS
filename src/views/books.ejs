@@ -1,197 +1,175 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Book Collection</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-            rel="stylesheet"
-        />
-        <link
-            href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
-            rel="stylesheet"
-        />
-    </head>
-    <body class="bg-gray-100 min-h-screen">
-        <div class="container py-4">
-            <h1 class="text-4xl font-bold mb-8 text-gray-800">Discover more</h1>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container py-4">
+        <h1 class="text-4xl font-bold mb-8 text-gray-800">Discover more</h1>
 
-            <!-- Search and Filter Section -->
-            <div class="mb-6 flex justify-between items-center">
-                <div class="w-full max-w-md flex items-center relative">
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Search books by title, author, or description"
-                        class="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+        <!-- Search and Filter Section -->
+        <div class="mb-6 flex justify-between items-center">
+            <div class="w-full max-w-md flex items-center relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search books by title, author, or description"
+                    class="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
+                />
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="search-icon absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer h-5 w-5"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
                     />
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="search-icon absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer h-5 w-5"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                        />
-                    </svg>
-                </div>
-
-                <div class="ml-4">
-                    <select
-                        id="sortSelect"
-                        class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
-                    >
-                        <option value="title-asc">Title (A-Z)</option>
-                        <option value="title-desc">Title (Z-A)</option>
-                        <option value="author-asc">Author (A-Z)</option>
-                        <option value="author-desc">Author (Z-A)</option>
-                    </select>
-                </div>
+                </svg>
             </div>
 
-            <!-- Books Grid -->
-            <div id="booksGrid" class="grid grid-cols-6 gap-4">
-                <% if (books && books.length > 0) { %> <%
-                books.forEach(function(book) { %>
-                <!-- Book card HTML here -->
-                <% }); %><% books && books.forEach(function(book) { %>
-                <div
-                    class="book-card bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105"
+            <div class="ml-4">
+                <select
+                    id="sortSelect"
+                    class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29C782]"
                 >
-                    <div>
-                        <img
-                            src="/books/<%= book.coverimage %>"
-                            alt="<%= book.title %>"
-                            class="w-full h-56 object-cover"
-                        />
-                    </div>
-                    <div class="p-4 relative h-32" title="<%= book.title %>">
-                        <h2 class="text-base font-semibold mb-1 text-gray-900">
-                            <%= book.title && book.title.length > 23 ?
-                            book.title.slice(0, 23) + "..." : book.title %>
-                        </h2>
-                        <p class="text-gray-600 text-sm mb-1">
-                            by <%= book.author %>
-                        </p>
-                        <a href="/books/<%= book.id %>">
-                            <button
-                                class="view-details-btn px-2 py-1 text-sm bg-[#29C782] text-white font-bold rounded-md hover:bg-[#242847] hover:text-[#29C782] transition absolute bottom-2 right-2"
-                                data-book-id="<%= book.id %>"
-                            >
-                                View Details
-                            </button>
-                        </a>
-                    </div>
-                </div>
-                <% }); %> <% } else { %>
-                <div
-                    id="noResultsMessage"
-                    class="text-center text-gray-600 text-xl mt-12 w-[75dvw] m-auto flex justify-center"
-                >
-                    No books found.
-                </div>
-                <% } %>
-            </div>
-
-            <!-- No Results Message -->
-            <div
-                id="noResultsMessage"
-                class="hidden text-center text-gray-600 text-xl mt-12"
-            >
-                No books found. Try a different search or filter.
+                    <option value="title-asc">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
+                    <option value="author-asc">Author (A-Z)</option>
+                    <option value="author-desc">Author (Z-A)</option>
+                </select>
             </div>
         </div>
 
-        <!-- JavaScript for Interactivity -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const searchInput = document.getElementById("searchInput");
-                const sortSelect = document.getElementById("sortSelect");
-                const booksGrid = document.getElementById("booksGrid");
-                const noResultsMessage =
-                    document.getElementById("noResultsMessage");
-                const bookCards = Array.from(
-                    document.querySelectorAll(".book-card")
-                );
+        <!-- Books Grid -->
+        <div id="booksGrid" class="grid grid-cols-6 gap-4">
+            <% if (books && books.length > 0) { %> <%
+            books.forEach(function(book) { %>
+            <!-- Book card HTML here -->
+            <% }); %><% books && books.forEach(function(book) { %>
+            <div
+                class="book-card bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105"
+            >
+                <div>
+                    <img
+                        src="/books/<%= book.coverimage %>"
+                        alt="<%= book.title %>"
+                        class="w-full h-56 object-cover"
+                    />
+                </div>
+                <div class="p-4 relative h-32" title="<%= book.title %>">
+                    <h2 class="text-base font-semibold mb-1 text-gray-900">
+                        <%= book.title && book.title.length > 23 ?
+                        book.title.slice(0, 23) + "..." : book.title %>
+                    </h2>
+                    <p class="text-gray-600 text-sm mb-1">
+                        by <%= book.author %>
+                    </p>
+                    <a href="/books/<%= book.id %>">
+                        <button
+                            class="view-details-btn px-2 py-1 text-sm bg-[#29C782] text-white font-bold rounded-md hover:bg-[#242847] hover:text-[#29C782] transition absolute bottom-2 right-2"
+                            data-book-id="<%= book.id %>"
+                        >
+                            View Details
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <% }); %> <% } else { %>
+            <div
+                id="noResultsMessage"
+                class="text-center text-gray-600 text-xl mt-12 w-[75dvw] m-auto flex justify-center"
+            >
+                No books found.
+            </div>
+            <% } %>
+        </div>
 
-                // Search functionality
-                searchInput.addEventListener("input", filterBooks);
+        <!-- No Results Message -->
+        <div
+            id="noResultsMessage"
+            class="hidden text-center text-gray-600 text-xl mt-12"
+        >
+            No books found. Try a different search or filter.
+        </div>
+    </div>
 
-                // Sort functionality
-                sortSelect.addEventListener("change", sortBooks);
+    <!-- JavaScript for Interactivity -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("searchInput");
+            const sortSelect = document.getElementById("sortSelect");
+            const booksGrid = document.getElementById("booksGrid");
+            const noResultsMessage =
+                document.getElementById("noResultsMessage");
+            const bookCards = Array.from(
+                document.querySelectorAll(".book-card")
+            );
 
-                function filterBooks() {
-                    const searchTerm = searchInput.value.toLowerCase();
-                    let visibleBooks = 0;
+            // Search functionality
+            searchInput.addEventListener("input", filterBooks);
 
-                    bookCards.forEach((card) => {
-                        const title = card
-                            .querySelector("h2")
-                            .textContent.toLowerCase();
-                        const author = card
-                            .querySelector("p")
-                            .textContent.toLowerCase();
-                        const description = card
-                            .querySelector("p.text-gray-500")
-                            .textContent.toLowerCase();
+            // Sort functionality
+            sortSelect.addEventListener("change", sortBooks);
 
-                        const isVisible =
-                            title.includes(searchTerm) ||
-                            author.includes(searchTerm) ||
-                            description.includes(searchTerm);
+            function filterBooks() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleBooks = 0;
 
-                        card.style.display = isVisible ? "block" : "none";
-                        visibleBooks += isVisible ? 1 : 0;
-                    });
+                bookCards.forEach((card) => {
+                    const title = card
+                        .querySelector("h2")
+                        .textContent.toLowerCase();
+                    const author = card
+                        .querySelector("p")
+                        .textContent.toLowerCase();
+                    const description = card
+                        .querySelector("p.text-gray-500")
+                        .textContent.toLowerCase();
 
-                    noResultsMessage.classList.toggle(
-                        "hidden",
-                        visibleBooks > 0
-                    );
-                }
+                    const isVisible =
+                        title.includes(searchTerm) ||
+                        author.includes(searchTerm) ||
+                        description.includes(searchTerm);
 
-                function sortBooks() {
-                    const [sortBy, order] = sortSelect.value.split("-");
-                    const sortedBooks = Array.from(bookCards).sort((a, b) => {
-                        let valueA, valueB;
-                        switch (sortBy) {
-                            case "title":
-                                valueA = a.querySelector("h2").textContent;
-                                valueB = b.querySelector("h2").textContent;
-                                break;
-                            case "author":
-                                valueA = a.querySelector("p").textContent;
-                                valueB = b.querySelector("p").textContent;
-                                break;
-                        }
-                        if (order === "asc") {
-                            return valueA.localeCompare(valueB);
-                        } else {
-                            return valueB.localeCompare(valueA);
-                        }
-                    });
+                    card.style.display = isVisible ? "block" : "none";
+                    visibleBooks += isVisible ? 1 : 0;
+                });
 
-                    // Reorder in the DOM
-                    sortedBooks.forEach((book) => booksGrid.appendChild(book));
-                }
+                noResultsMessage.classList.toggle("hidden", visibleBooks > 0);
+            }
 
-                // View Details Button
-                document
-                    .querySelectorAll(".view-details-btn")
-                    .forEach((btn) => {
-                        btn.addEventListener("click", (e) => {
-                            const bookId =
-                                e.target.getAttribute("data-book-id");
-                            window.location.href = `/books/${bookId}`;
-                        });
-                    });
+            function sortBooks() {
+                const [sortBy, order] = sortSelect.value.split("-");
+                const sortedBooks = Array.from(bookCards).sort((a, b) => {
+                    let valueA, valueB;
+                    switch (sortBy) {
+                        case "title":
+                            valueA = a.querySelector("h2").textContent;
+                            valueB = b.querySelector("h2").textContent;
+                            break;
+                        case "author":
+                            valueA = a.querySelector("p").textContent;
+                            valueB = b.querySelector("p").textContent;
+                            break;
+                    }
+                    if (order === "asc") {
+                        return valueA.localeCompare(valueB);
+                    } else {
+                        return valueB.localeCompare(valueA);
+                    }
+                });
+
+                // Reorder in the DOM
+                sortedBooks.forEach((book) => booksGrid.appendChild(book));
+            }
+
+            // View Details Button
+            document.querySelectorAll(".view-details-btn").forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const bookId = e.target.getAttribute("data-book-id");
+                    window.location.href = `/books/${bookId}`;
+                });
             });
-        </script>
-    </body>
-</html>
+        });
+    </script>
+</body>
